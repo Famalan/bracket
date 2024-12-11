@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.models.user import User, UserRole
+from app.models.user import UserRole
 from app.core.security import get_password_hash
 from sqlalchemy import text
 
@@ -11,43 +11,49 @@ async def init_db(db: AsyncSession) -> None:
         admin = result.fetchone()
 
         if not admin:
+            # SQL запрос для вставки пользователя
+            insert_query = text("""
+                INSERT INTO users (username, email, hashed_password, role, is_active)
+                VALUES (:username, :email, :hashed_password, :role, :is_active)
+            """)
+
             # Создаем администратора
-            admin_user = User(
-                username="admin",
-                email="admin@example.com",
-                hashed_password=get_password_hash("admin"),
-                role=UserRole.ADMIN,
-                is_active=True
+            await db.execute(
+                insert_query,
+                {
+                    "username": "admin",
+                    "email": "admin@example.com",
+                    "hashed_password": get_password_hash("admin"),
+                    "role": UserRole.ADMIN,
+                    "is_active": True
+                }
             )
-            db.add(admin_user)
 
             # Создаем тестовых организаторов
-            organizers = [
-                User(
-                    username=f"organizer{i}",
-                    email=f"organizer{i}@example.com",
-                    hashed_password=get_password_hash("organizer"),
-                    role=UserRole.ORGANIZER,
-                    is_active=True
+            for i in range(1, 3):
+                await db.execute(
+                    insert_query,
+                    {
+                        "username": f"organizer{i}",
+                        "email": f"organizer{i}@example.com",
+                        "hashed_password": get_password_hash("organizer"),
+                        "role": UserRole.ORGANIZER,
+                        "is_active": True
+                    }
                 )
-                for i in range(1, 3)
-            ]
-            for org in organizers:
-                db.add(org)
 
             # Создаем тестовых игроков
-            players = [
-                User(
-                    username=f"player{i}",
-                    email=f"player{i}@example.com",
-                    hashed_password=get_password_hash("player"),
-                    role=UserRole.PLAYER,
-                    is_active=True
+            for i in range(1, 5):
+                await db.execute(
+                    insert_query,
+                    {
+                        "username": f"player{i}",
+                        "email": f"player{i}@example.com",
+                        "hashed_password": get_password_hash("player"),
+                        "role": UserRole.PLAYER,
+                        "is_active": True
+                    }
                 )
-                for i in range(1, 5)
-            ]
-            for player in players:
-                db.add(player)
 
             await db.commit()
             print("База данных инициализирована")

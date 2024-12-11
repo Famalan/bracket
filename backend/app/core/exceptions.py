@@ -2,7 +2,11 @@ from fastapi import HTTPException, status
 from typing import Optional
 
 class TournamentException(HTTPException):
-    def __init__(self, detail: str, status_code: int = status.HTTP_400_BAD_REQUEST):
+    def __init__(
+        self,
+        status_code: int = status.HTTP_400_BAD_REQUEST,
+        detail: str = "Ошибка в турнире"
+    ):
         super().__init__(status_code=status_code, detail=detail)
 
 class NotFoundError(TournamentException):
@@ -27,8 +31,15 @@ class ValidationError(TournamentException):
         )
 
 class DatabaseError(TournamentException):
-    def __init__(self, message: Optional[str] = None):
+    def __init__(self, detail: str = "Ошибка базы данных"):
         super().__init__(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=message or "Ошибка базы данных"
+            detail=detail
+        )
+
+class AuthenticationError(TournamentException):
+    def __init__(self, detail: str = "Ошибка аутентификации"):
+        super().__init__(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=detail
         ) 

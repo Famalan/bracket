@@ -19,7 +19,7 @@ class UserUpdate(BaseModel):
 class User(UserBase):
     id: int
     role: UserRole
-    is_active: bool = True
+    is_active: bool
     created_at: datetime
     updated_at: datetime
 

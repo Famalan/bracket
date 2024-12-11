@@ -3,7 +3,7 @@
 ### Технологии:
 
 -   **Backend**: Python + FastAPI
--   **Frontend**: React + Shadcn UI + TypeScript + Vite
+-   **Frontend**: React + Tailwind CSS + TypeScript + Vite
 -   **База данных**: PostgreSQL
 -   **ORM**: SQLAlchemy (есть условия использования)
 -   **Дополнительные библиотеки**: Alembic (для миграций), JWT (для аутентификации), bcrypt (для хеширования паролей).
@@ -61,7 +61,7 @@
 1. **Users**:
 
     - `id`: первичный ключ.
-    - `email`: уникальный email.
+    - `username`: уникальный никнейм.
     - `hashed_password`: хешированный пароль.
     - `role`: роль пользователя.
     - `created_at`, `updated_at`.
@@ -134,7 +134,7 @@
 
 ### Frontend:
 
--   **React + Shadcn UI**:
+-   **React + Tailwind CSS**:
     -   Простая и интуитивно понятная структура страниц.
     -   Асинхронное взаимодействие с сервером через Axios/Fetch.
     -   Интерфейс для просмотра и управления турнирами, командами, сеткой.

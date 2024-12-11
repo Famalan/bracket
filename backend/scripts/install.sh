@@ -1,12 +1,7 @@
 #!/bin/bash
 
-# Переходим в корневую директорию backend
-cd ../
-
-# Создаем виртуальное окружение, если его нет
-if [ ! -d "venv" ]; then
-    python3.11 -m venv venv
-fi
+# Создаем виртуальное окружение
+python3.11 -m venv venv
 
 # Активируем виртуальное окружение
 source venv/bin/activate
@@ -17,7 +12,13 @@ pip install --upgrade pip
 # Устанавливаем зависимости
 pip install -r requirements.txt
 
+# Делаем скрипты исполняемыми
+chmod +x scripts/*.sh
+
 # Проверяем зависимости для бэкапов
 ./scripts/check_backup_deps.sh
 
-echo "Зависимости успешно установлены" 
+# Настраиваем базу данных
+./scripts/setup_db.sh
+
+echo "Установка завершена" 
